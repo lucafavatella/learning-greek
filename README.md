@@ -1,6 +1,7 @@
 # learning-greek
 
 [![Join the chat at https://gitter.im/jtauber/learning-greek](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jtauber/learning-greek?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/jtauber/learning-greek.svg)](https://travis-ci.org/jtauber/learning-greek)
 
 I’m building this site partly to help people learn Koine Greek and partly to
 research how to improve the way people learn Koine Greek.

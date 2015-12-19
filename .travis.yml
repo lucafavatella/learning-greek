@@ -1,0 +1,25 @@
+sudo: false
+language: python
+python: ## Keep in sync with `tox.ini`
+  - 2.7
+  - 3.2
+  - 3.3
+  - 3.4
+install:
+  - pip install -r requirements.txt
+  - npm install -g uglify-js less
+before_script:
+  - case $(python -c 'import sys; print (sys.version_info.major)') in 2) ;; 3) 2to3 -w learning_greek/settings.py;; esac ## For `urlparse`.
+  - psql -c 'create database travis_ci_test;' -U postgres
+  - ./refresh.sh ## PGUSER=postgres ## Ref https://docs.travis-ci.com/user/using-postgresql/#Using-PostgreSQL-in-your-Builds
+script:
+  - (cd learning_greek/static/learning_greek/; make)
+  - ./manage.py runserver &
+  - S=$!
+  - sleep 10 ## HACK Just to be reasonably sure DB and Web Server are up...
+  - curl http://127.0.0.1:8000/ | tee >(cat 1>&2) | grep 'Code available under an MIT License. Content available under a CC-BY-SA license unless otherwise noted.' ## Assumption: bash. Ref https://docs.travis-ci.com/user/customizing-the-build/#How-does-this-work%3F-(Or%2C-why-you-should-not-use-exit-in-build-steps)
+  - kill $S
+matrix:
+  allow_failures:
+    - python: 3.2
+  fast_finish: true
